@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisation mot de passe
+{% endblock %}
+
+{% block content %}
+	<form method="post">
+
+
+		<h1 class="h3 mb-3 font-weight-normal mt-3">Réinitialisation mot de passe</h1>
+		<label for="inputEmail">Email</label><br>
+		<input type="email" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+		<br>
+
+		<button class="btn btn-lg btn-primary col-12" type="submit">
+			Réinitialisation du mot de passe
+		</button>
+	</form>
+{% endblock %}

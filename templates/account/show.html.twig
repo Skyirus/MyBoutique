@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma commande
+{% endblock %}
+
+{% block content %}
+
+	<h1 class="mt-3">Ma commande de référence
+		{{order.reference}}</h1>
+	<p>Dans cet espace, vous pouvez voir le détail de votre commande</p>
+	<a href="{{path('account')}}">Retour</a>
+	<hr>
+	<strong>Commande passée le:
+		{{order.createdAt | date('d/m/Y')}}</strong><br>
+	<strong>Livrée par
+		{{order.carrier.name}}</strong><br>
+	<strong>Détail</strong>
+	<hr>
+
+	<div class="row">
+
+		<div class="col-md-6">
+			<strong>Adresse de livraison</strong>
+			{{order.delivery | replace({'[br]':'<br>'}) | raw}}
+			<hr>
+			<strong>Mon transporteur</strong>
+			{{order.carrier | replace({'[br]':'<br>'}) | raw}}
+
+		</div>
+		<div class="col-md-6">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Produit</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Votre Commentaire</th>
+						<th scope="col">Quantité</th>
+						<th scope="col">Prix</th>
+						<th scope="col">Total</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% set total = null %}
+					{% for product in order.orderDetails %}
+						{% set total= total + product.quantity *product.product.price %}
+						<tr>
+							<th scope="row"><img src="/uploads/{{product.product.illustration}}" alt="{{product.product.name}}" width="100px"></th>
+							<td>{{product.product.name}}</td>
+							<td>
+								<a href="{{path('comment_products',{'slug': product.product.slug})}}">Votre commentaire</a>
+							</td>
+
+							<td>
+
+								{{product.quantity}}
+
+							</td>
+							<td>{{(product.product.price/100 | number_format(2))}}</td>
+							<td>{{(product.quantity *product.product.price/100) | number_format(2)}}</td>
+							<td></td>
+						</tr>
+					{% endfor %}
+
+				</tbody>
+			</table>
+			<div class="text-end">
+
+				<b>Sous Total:
+					{{total/100 | number_format(2)}}
+					€</b><br>
+				<b>Livraison:
+					{{order.carrier.price/100 | number_format(2)}}
+					€</b><br>
+				<b>Total:
+					{{(total + order.carrier.price)/100 | number_format(2)}}
+					€</b>
+			</div>
+
+		</div>
+
+	</div>
+
+
+{% endblock %}
